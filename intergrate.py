@@ -36,11 +36,11 @@ def maths(eq):
     result = []
 
     for element in eq:
-        for index in range(0, len(element)):
+        for index in range(0, len(element)-1):
             text = ""
 
             # raised to the power
-            if element[index] == "^" and element[index+1] != "/" and element[index+2] != "/":
+            if element[index] == "^":
                 # power rule: integral of x^2 = (x^2+1)/3
                 exponent = int(element[index+1])
                 variable = element[index-1]
@@ -48,9 +48,11 @@ def maths(eq):
                 # checking for a single and double digit base
                 if len(element[index]) == 4:
                     base = int(element[index-2])
+                    text = base
                 if len(element[index]) > 4:
                     base = int(element[index-2], element[index-3])
-                    exponent = int(element[index+1], element[index+2])
+                    exponent = int(str(element[index+1], element[index+2]))
+                    text = base
 
                 if check(variable):
                     new_exponent = exponent + 1
@@ -59,30 +61,28 @@ def maths(eq):
                 result.append(text)
 
             # square root function: the integral of the square root of x == x^1/2
-            elif element[index] == "/" and element[index+1] == "/":
+            elif element[index] == "/":
+                if element[index+1] == "/":
                     root = element[index+2]
                     variable = element[index-3]
                     exponent = element[index-1]
 
-                    text += f"{variable} ^ ({exponent}/{root}) + C"
+                    text = f"{variable} ^ ({exponent}/{root}) + C"
                     result.append(text)
 
             # 1/X function
-            elif element[index] == "1" and element[index+1] == "/" and element[index+2] != "/":
-                text += "ln "
-                for term in range(2, len(element)):
-                    text += f"{str(element[term])}"
-                text += " + C"
-                result.append(text)
+            elif element[index] == "1":
+                if element[index+1] == "/" and element[index+2] != "/":
+                    text = "ln "
+                    for term in range(2, len(element)):
+                        text += f"{str(element[term])}"
+                    text += " + C"
+                    result.append(text)
 
-            # any alone terms
-                # alone terms doesn't work
-            elif (element[index] == "+" or element[index] == "/" or element[index] == "*" or element[index] == "-"):
-                try:
-                    if element[index+2] != "^":pass
-                except Exception:
-                    print(element)
-                    text += f"{element[index+1]}x"
+            # any alone terms (DOESNT WORK)
+            elif element[index] != "^" and check(element[index]) == False and (element[index] != "+" or element[index] != "-" or element[index] != "*" or element[index] != "/"):
+                if element[index+1] != "^":
+                    text = f"{element}x + C"
                     result.append(text)
 
     return result
@@ -105,6 +105,7 @@ def main():
                 print("Bye.....")
             else:
                 equation = command.split(" ")
+                print(equation)
                 result = maths(equation)
                 quest = ""
                 ans = ""
