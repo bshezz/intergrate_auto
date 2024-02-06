@@ -34,11 +34,18 @@ def maths(eq):
     result = []
 
     reciprocal = False
+    sqr = False
     for element in eq:
+
+        # any lone terms (DOESNT WORK)  
+        if element.isdigit():
+            result.append(f"{element}x")
+
         for index in range(0, len(element)-1):
             text = ""
+
             # raised to the power
-            if element[index] == "^" and reciprocal == False:
+            if element[index] == "^" and reciprocal == False and sqr == False:
                 # power rule: integral of x^2 = (x^2+1)/3
                 exponent = int(element[index+1])
                 variable = element[index-1]
@@ -61,6 +68,7 @@ def maths(eq):
             # square root function: the integral of the square root of x == x^1/2
             elif element[index] == "/":
                 if element[index+1] == "/":
+                    sqr = True
                     root = element[index+2]
                     variable = element[index-3]
                     exponent = element[index-1]
@@ -80,10 +88,6 @@ def maths(eq):
                             term += 1
                     result.append(text)
 
-
-            # any lone terms (DOESNT WORK)
-            elif element.isdigit():
-                result.append(f"{element}x")
 
     result.append("+ C")
     return result
