@@ -1,0 +1,16 @@
+
+ 1. 1/(x-3) 
+ln x + C 
+ 2. "b:/python required/python.exe" b:/repos/intergrate_auto/intergrate.py 
++ C 
+ 1. 1/(x^1) 
+ln x^1 (x^2)/2 + C 
+ 1. 1/(x^1) 
+ln x^1 + C 
+ 2. 1/(x-3) 
+ln x-3 + C 
+ 3. x^2 
+(x^3)/3 + C 
+ 4. 4 
++ C 
+ 

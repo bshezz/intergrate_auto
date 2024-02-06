@@ -3,7 +3,7 @@ def instructions():
     print()
     print("+---------------------------------------------------------------------+")
     print("+-                     WELCOME TO INTERGRATE AUTO!                   -+")
-    print("+- for seperate expressions please use spaces in between             -+")
+    print("+- for seperate terms in an expression use spaces in between terms   -+")
     print("+- To use type in your equations using these criteria:               -+")
     print(" > use the ^ character for raising to the power                      -+")
     print(" > use the // pair of characters for square root                     -+")
@@ -17,8 +17,6 @@ def instructions():
     print(" > all intergration equations must be in their simplist form         -+")
     print(" > do not put the dx at the end of the expression                    -+")
     print(" > for any 1/x please use this syntax: 1/(x^1)                       -+")
-    print(" > all numbers with no variables, must be positive; (+) before it or -+")
-    print(" > all numbers with no variables, must be negative; (-) before it    -+")
     print("+---------------------------------------------------------------------+")
     print()
 
@@ -35,12 +33,12 @@ def check(variable):
 def maths(eq):
     result = []
 
+    reciprocal = False
     for element in eq:
         for index in range(0, len(element)-1):
             text = ""
-
             # raised to the power
-            if element[index] == "^":
+            if element[index] == "^" and reciprocal == False:
                 # power rule: integral of x^2 = (x^2+1)/3
                 exponent = int(element[index+1])
                 variable = element[index-1]
@@ -56,7 +54,7 @@ def maths(eq):
 
                 if check(variable):
                     new_exponent = exponent + 1
-                    text += f"({variable}^{new_exponent})/{new_exponent} + C"
+                    text += f"({variable}^{new_exponent})/{new_exponent}"
 
                 result.append(text)
 
@@ -67,24 +65,27 @@ def maths(eq):
                     variable = element[index-3]
                     exponent = element[index-1]
 
-                    text = f"{variable} ^ ({exponent}/{root}) + C"
+                    text = f"{variable} ^ ({exponent}/{root})"
                     result.append(text)
 
-            # 1/X function
+            # reciprocal function
             elif element[index] == "1":
                 if element[index+1] == "/" and element[index+2] != "/":
+                    reciprocal = True
                     text = "ln "
-                    for term in range(2, len(element)):
-                        text += f"{str(element[term])}"
-                    text += " + C"
+                    for term in range(3, len(element)-1):
+                        if element[term] != "^" or element[term] != "(" or element[term] != ")":
+                            text += element[term]
+                        if element[term] == "^":
+                            term += 1
                     result.append(text)
 
-            # any alone terms (DOESNT WORK)
-            elif element[index] != "^" and check(element[index]) == False and (element[index] != "+" or element[index] != "-" or element[index] != "*" or element[index] != "/"):
-                if element[index+1] != "^":
-                    text = f"{element}x + C"
-                    result.append(text)
 
+            # any lone terms (DOESNT WORK)
+            elif element.isdigit():
+                result.append(f"{element}x")
+
+    result.append("+ C")
     return result
                     
 
