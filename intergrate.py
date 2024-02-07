@@ -110,7 +110,6 @@ def main():
                 print("Bye.....")
             else:
                 equation = command.split(" ")
-                print(equation)
                 result = maths(equation)
                 quest = ""
                 ans = ""
